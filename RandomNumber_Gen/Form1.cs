@@ -1,18 +1,24 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace RandomNumber_Gen
 {
     public partial class Form1 : Form
     {
+        private RandomNumberGenerator _generator;
+
         public Form1()
         {
             InitializeComponent();
+            _generator = new RandomNumberGenerator();
+            txtUrl.Text = Path.Combine(Environment.CurrentDirectory, @"..\..\output\out.txt");
         }
 
-        public bool aValidURL (string path) { 
-            // Check if the local path provided is valid
+        private bool IsValidPath(string path)
+        {
             try
             {
                 Path.GetFullPath(path);
@@ -22,77 +28,104 @@ namespace RandomNumber_Gen
             {
                 return false;
             }
-
         }
-
 
         private void btnSend_Click(object sender, EventArgs e)
         {
             try
             {
-                if (txtValue.Text == null || txtValue.Text.Trim() == "")
+                if (string.IsNullOrWhiteSpace(txtValue.Text))
                 {
-                    MessageBox.Show("Please enter a number");
+                    MessageBox.Show("Please enter a number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (txtUrl.Text == "")
+                if (!int.TryParse(txtValue.Text, out int count) || count <= 0)
                 {
-                    MessageBox.Show("Please enter a URL");
+                    MessageBox.Show("Please enter a valid positive number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if ((aValidURL(txtUrl.Text) == false))
+                if (string.IsNullOrWhiteSpace(txtUrl.Text))
                 {
-                    MessageBox.Show("Please enter a valid URL");
+                    MessageBox.Show("Please enter a file path.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                int n = int.Parse(txtValue.Text);
+                if (!IsValidPath(txtUrl.Text))
+                {
+                    MessageBox.Show("Please enter a valid file path.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                // Get the current directory where the app is running from (bin/Debug)
-                string currentDirectory = Environment.CurrentDirectory;
-
-                // Combine with the relative path to get the correct file path
-                string filePath = Path.Combine(currentDirectory, @"..\output\out.txt");
-
-                // Check if the directory exists
+                string filePath = txtUrl.Text;
                 string directoryPath = Path.GetDirectoryName(filePath);
+                
                 if (!Directory.Exists(directoryPath))
                 {
-                    // If directory doesn't exist, create it
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                Random random = new Random();
+                var numbers = _generator.Generate(count, 1000, 2000);
+                File.WriteAllLines(filePath, numbers.Select(n => n.ToString()));
 
-                // Open the file for writing (it will create the file if it doesn't exist)
-                using (StreamWriter writer = new StreamWriter(filePath))
-                {
-                    for (int i = 0; i < n; i++)
-                    {
-                        int randomNumber = random.Next(1000, 2001);
-                        writer.WriteLine(randomNumber);
-                    }
-                }
-
-                // Notify the user
-                MessageBox.Show($"Successfully generated {n} random numbers to the file: {filePath}");
-
+                lblOutput.Text = $"Generated: {string.Join(", ", numbers.Take(10))}{(count > 10 ? "..." : "")}";
+                MessageBox.Show($"Successfully generated {count} random numbers to:\n{filePath}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("Access to the specified file path is denied. Try running the app as an administrator.");
+                MessageBox.Show("Access denied. Try running as administrator or choose a different location.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (IOException ioEx)
             {
-                MessageBox.Show($"I/O error occurred: {ioEx.Message}");
+                MessageBox.Show($"I/O error: {ioEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An unexpected error occurred: {ex.Message}");
+                MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+                dialog.DefaultExt = "txt";
+                dialog.FileName = "out.txt";
+                
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    txtUrl.Text = dialog.FileName;
+                }
+            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtValue.Clear();
+            lblOutput.Text = "Preview: ";
+            txtValue.Focus();
+        }
+    }
+
+    public class RandomNumberGenerator
+    {
+        private readonly Random _random;
+
+        public RandomNumberGenerator()
+        {
+            _random = new Random();
+        }
+
+        public List<int> Generate(int count, int min, int max)
+        {
+            var numbers = new List<int>(count);
+            for (int i = 0; i < count; i++)
+            {
+                numbers.Add(_random.Next(min, max + 1));
+            }
+            return numbers;
+        }
     }
 }

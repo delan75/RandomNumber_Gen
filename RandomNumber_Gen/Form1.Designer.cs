@@ -34,7 +34,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnSend = new System.Windows.Forms.Button();
             this.lblOutput = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnBrowse = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtValue
@@ -48,36 +49,36 @@
             // 
             this.txtUrl.Location = new System.Drawing.Point(271, 163);
             this.txtUrl.Name = "txtUrl";
-            this.txtUrl.Size = new System.Drawing.Size(315, 22);
-            this.txtUrl.TabIndex = 0;
+            this.txtUrl.Size = new System.Drawing.Size(250, 22);
+            this.txtUrl.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(164, 123);
+            this.label1.Location = new System.Drawing.Point(100, 123);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 20);
+            this.label1.Size = new System.Drawing.Size(149, 20);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Enter N: ";
+            this.label1.Text = "Number Count: ";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(88, 165);
+            this.label2.Location = new System.Drawing.Point(133, 165);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(161, 20);
+            this.label2.Size = new System.Drawing.Size(116, 20);
             this.label2.TabIndex = 1;
-            this.label2.Text = "Enter Path(URL): ";
+            this.label2.Text = "Output Path: ";
             // 
             // btnSend
             // 
             this.btnSend.Location = new System.Drawing.Point(495, 211);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 40);
-            this.btnSend.TabIndex = 2;
-            this.btnSend.Text = "Send";
+            this.btnSend.Size = new System.Drawing.Size(91, 40);
+            this.btnSend.TabIndex = 3;
+            this.btnSend.Text = "Generate";
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
@@ -85,30 +86,41 @@
             // 
             this.lblOutput.AutoSize = true;
             this.lblOutput.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOutput.ForeColor = System.Drawing.Color.Red;
-            this.lblOutput.Location = new System.Drawing.Point(251, 87);
+            this.lblOutput.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOutput.ForeColor = System.Drawing.Color.DarkBlue;
+            this.lblOutput.Location = new System.Drawing.Point(104, 270);
             this.lblOutput.Name = "lblOutput";
-            this.lblOutput.Size = new System.Drawing.Size(127, 20);
+            this.lblOutput.Size = new System.Drawing.Size(68, 18);
             this.lblOutput.TabIndex = 1;
-            this.lblOutput.Text = "You entered:  ";
+            this.lblOutput.Text = "Preview: ";
             // 
-            // button1
+            // btnClear
             // 
-            this.button1.Location = new System.Drawing.Point(104, 372);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 40);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Clear";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.btnSend_Click);
+            this.btnClear.Location = new System.Drawing.Point(271, 211);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 40);
+            this.btnClear.TabIndex = 4;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Location = new System.Drawing.Point(527, 160);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(59, 28);
+            this.btnBrowse.TabIndex = 2;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(700, 350);
+            this.Controls.Add(this.btnBrowse);
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.lblOutput);
             this.Controls.Add(this.label2);
@@ -116,7 +128,7 @@
             this.Controls.Add(this.txtUrl);
             this.Controls.Add(this.txtValue);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Random Number Generator";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -130,7 +142,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.Label lblOutput;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnBrowse;
     }
 }
 
