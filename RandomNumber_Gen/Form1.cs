@@ -11,6 +11,21 @@ namespace RandomNumber_Gen
             InitializeComponent();
         }
 
+        public bool aValidURL (string path) { 
+            // Check if the local path provided is valid
+            try
+            {
+                Path.GetFullPath(path);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+
+
         private void btnSend_Click(object sender, EventArgs e)
         {
             try
@@ -24,6 +39,12 @@ namespace RandomNumber_Gen
                 if (txtUrl.Text == "")
                 {
                     MessageBox.Show("Please enter a URL");
+                    return;
+                }
+
+                if ((aValidURL(txtUrl.Text) == false))
+                {
+                    MessageBox.Show("Please enter a valid URL");
                     return;
                 }
 
